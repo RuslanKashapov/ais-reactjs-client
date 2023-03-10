@@ -14,9 +14,9 @@
  * Подробнее о пакете UIKit см.: https://getuikit.com/docs/installation
  */
 import React, { useState } from "react";
-import HomePage from "./components/HomePage";
-import UpdatePage from "./components/UpdatePage";
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+
+import CityWeatherMonitor from "./CityWeatherMonitor";
+import UpdateForm from "./UpdateForm";
 
 
 /**
@@ -34,26 +34,19 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
  * https://reactjs.org/docs/hooks-state.html
  * 
  */
-function App() {
-
+function UpdatePage() {
   // Рендерим контент.
   // Функция map позволяет рендерить элементы массивов.
   return (
-    <BrowserRouter>
-        <nav class="uk-navbar-container">
-          <div class="uk-navbar-center">
-            <ul class="uk-navbar-nav">
-              <li><NavLink to="/">Calculate</NavLink></li>
-              <li><NavLink to="/update">Update</NavLink></li>
-            </ul>
-          </div>
-        </nav>
-        <Routes>
-        <Route path='/' element={<HomePage/>} />
-        <Route path='/update' element={<UpdatePage/>} />
-      </Routes>
-    </BrowserRouter>
+    <div className="uk-section uk-section-muted">
+      <div className="uk-grid uk-text-center">
+        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><UpdateForm/></div>
+      </div>
+      <div className="uk-grid uk-text-center">
+        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor/></div>
+      </div>
+    </div>
   );
 }
 
-export default App;
+export default UpdatePage;

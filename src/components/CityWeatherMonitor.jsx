@@ -76,7 +76,7 @@ class CityWeatherMonitor extends React.Component {
             return(
                 <div className="uk-alert-danger">
                     <a className="uk-alert-close"></a>
-                    <p>NO DATA</p>
+                    <p>Waiting for data</p>
                 </div>
             )
         }

@@ -13,7 +13,7 @@
  * 
  * const { API_URL } = process.env;
  */
-export const API_URL = "http://127.0.0.1:8000/transforecast"
+export const API_URL = "http://127.0.0.1:8000/transformator"
 
 /**
  * Словарь доступных населённых пунктов в данном примере (для упрощения) вынесен как константа, 

@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL, CITY_NAMES, POWER_NUMBERS } from "./constants";
+import Select from 'react-select';
 
 
-class CityWeatherForm extends React.Component {
+
+class transformatorForm extends React.Component {
 
   constructor(props) {
     super(props);
     // устанавливаем состояние компонента по умолчанию
     this.state = {number: 100, hydrogen: 100, oxygen: 100, nitrogen: 100, methane: 100, co: 100, co_2: 100, ethylene: 100, ethane: 100, acethylene: 100, dbds: 100,
-     power_factor: 100, interfacial_v: 100, dielectric_rigidity: 100, water_content: 100, health_index: 100, city_id: 1, types: 1};
-  }
+    power_factor: 100, interfacial_v: 100, dielectric_rigidity: 100, water_content: 100, health_index: 100, city_id: 1, type: 1, cities: [], types: []};
+    }
 
   /**
    * Обновление данных на сервере (отправка HTTP PUT запроса).
@@ -30,10 +32,9 @@ class CityWeatherForm extends React.Component {
     event.preventDefault();   // необходимо, чтобы отключить стандартное поведение формы в браузере (AJAX)
     // формируем данные для отправки на сервер
     let data = {
-      id: parseFloat(this.state.id), 
+      number: parseInt(this.state.number), 
       hydrogen: parseInt(this.state.hydrogen), 
     };
-
     // HTTP-клиент axios автоматически преобразует объект data в json-строку
     axios.put(API_URL, data, {
       headers: {
@@ -48,6 +49,7 @@ class CityWeatherForm extends React.Component {
         alert(error);
     });
   }
+
 
   createData = (event) => {
     console.log('POST Request to: ' + API_URL)
@@ -71,7 +73,7 @@ class CityWeatherForm extends React.Component {
       dielectric_rigidity: parseInt(this.state.dielectric_rigidity),
       water_content: parseInt(this.state.water_content),
       city_id: parseInt(this.state.city_id),
-      types: parseInt(this.state.types),
+      type: parseInt(this.state.type),
       health_index: parseFloat(this.state.health_index),
     };
 
@@ -90,18 +92,48 @@ class CityWeatherForm extends React.Component {
     });
   }
 
+  async getCities(){
+    const data = await axios.get("http://127.0.0.1:8000/cities")
+    const tmp = data.data
+    const options = tmp.map(d => ({
+      "value" : d.id,
+      "label" : d.name
+    }))
+    this.setState({cities: options})
+  }
+
+  async getTypes(){
+    const data = await axios.get("http://127.0.0.1:8000/types")
+    const tmp = data.data
+    const options = tmp.map(d => ({
+      "value" : d.id,
+      "label" : d.name
+    }))
+    this.setState({types: options})
+  }
+
+
+
+
+  componentDidMount(){
+    this.getCities()
+    this.getTypes()
+  }
+
+handleChange(e){
+  this.setState({id: e.value, name: e.label})
+ }
 
   render() {
+    console.log(this.state.cities)
     return (
-      <form onSubmit={this.createData} className="uk-form-stacked">
-         {/* <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
-          <select className="uk-select" value={city} onChange={(e) => setCity(e.target.value)}>
-            {Object.keys(CITY_NAMES).map((cityName) => <option value={cityName}>{cityName}</option>)}
-          </select>
-          <select className="uk-select" value={power} onChange={(e) => setPower(e.target.value)}>
-            {Object.keys(POWER_NUMBERS).map((power) => <option value={power}>{power}</option>)}
-          </select>
-      </div> */}
+      <form className="uk-form-stacked">
+         <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
+         <Select placeholder='Select city' options={this.state.cities} onChange={this.handleChange.bind(this)} />
+         <br></br>
+         <Select placeholder='Select transformator type' options={this.state.types} onChange={this.handleChange.bind(this)} />
+        </div>
+        <div className="uk-margin-strict">
         <div className="uk-margin">
           <label className="uk-form-label">Number:</label>
           <input className="uk-input" type="text" onChange={(e) => {this.setState({number: e.target.value})}} />
@@ -130,6 +162,8 @@ class CityWeatherForm extends React.Component {
           <label className="uk-form-label">CO2:</label>
           <input className="uk-input" type="text" onChange={(e) => {this.setState({co2: e.target.value})}} />
         </div>
+        </div>
+        <div className="uk-margin-strict">
         <div className="uk-margin">
           <label className="uk-form-label">Ethylene:</label>
           <input className="uk-input" type="text" onChange={(e) => {this.setState({ethylene: e.target.value})}} />
@@ -158,11 +192,12 @@ class CityWeatherForm extends React.Component {
           <label className="uk-form-label">Water_content</label>
           <input className="uk-input" type="text" onChange={(e) => {this.setState({water_content: e.target.value})}} />
         </div>
-        <input type="submit" value="Update data" className="uk-button uk-button-primary"/>
+        </div>
+        <input onClick={this.createData} type="submit" value="Create data" className="uk-button uk-button-primary"/>
+
       </form>
     );
   }
 
 }
-
-export default CityWeatherForm;
+export default transformatorForm;
