@@ -40,7 +40,7 @@ function UpdatePage() {
   return (
     <div className="uk-section uk-section-muted">
       <div className="uk-grid uk-text-center">
-        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><UpdateForm/></div>
+        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><UpdateForm/> <br></br></div>
       </div>
       <div className="uk-grid uk-text-center">
         <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor/></div>

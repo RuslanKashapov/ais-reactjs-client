@@ -59,11 +59,11 @@ class UpdateForm extends React.Component {
         <div className="uk-margin-strict">
         <div className="uk-margin">
           <label className="uk-form-label">Number:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({number: e.target.value})}} />
+          <input className="uk-input" type="number" onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={(e) => {this.setState({number: e.target.value})}} />
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Nitrogen:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({nitrogen: e.target.value})}} />
+          <input className="uk-input" type="number" onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={(e) => {this.setState({nitrogen: e.target.value})}} />
         </div>
         </div>
         <input onClick={this.updateData} type="submit" value="Update data" className="uk-button uk-button-primary"/>

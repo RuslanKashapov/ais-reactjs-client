@@ -11,7 +11,7 @@ class transformatorForm extends React.Component {
     super(props);
     // устанавливаем состояние компонента по умолчанию
     this.state = {number: 100, hydrogen: 100, oxygen: 100, nitrogen: 100, methane: 100, co: 100, co_2: 100, ethylene: 100, ethane: 100, acethylene: 100, dbds: 100,
-    power_factor: 100, interfacial_v: 100, dielectric_rigidity: 100, water_content: 100, health_index: 100, city_id: 1, type: 1, cities: [], types: []};
+    power_factor: 100, interfacial_v: 100, dielectric_rigidity: 100, water_content: 100, health_index: 0, city_id: 1, types: 1, cities: [], types_: []};
     }
 
   /**
@@ -26,29 +26,6 @@ class transformatorForm extends React.Component {
    * 
    * @param {*} event 
    */
-  updateData = (event) => {
-    console.log('PUT Request to: ' + API_URL)
-    // получаем Id населённого пункта из словаря и меняем состояние через встроенный метод класса React.Component setState
-    event.preventDefault();   // необходимо, чтобы отключить стандартное поведение формы в браузере (AJAX)
-    // формируем данные для отправки на сервер
-    let data = {
-      number: parseInt(this.state.number), 
-      hydrogen: parseInt(this.state.hydrogen), 
-    };
-    // HTTP-клиент axios автоматически преобразует объект data в json-строку
-    axios.put(API_URL, data, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-      },
-    })
-    .then(response => {
-      console.log('Response: ' + response.status);
-    }, error => {
-        console.log(error);
-        alert(error);
-    });
-  }
 
 
   createData = (event) => {
@@ -73,7 +50,7 @@ class transformatorForm extends React.Component {
       dielectric_rigidity: parseInt(this.state.dielectric_rigidity),
       water_content: parseInt(this.state.water_content),
       city_id: parseInt(this.state.city_id),
-      type: parseInt(this.state.type),
+      types: parseInt(this.state.types),
       health_index: parseFloat(this.state.health_index),
     };
 
@@ -109,92 +86,93 @@ class transformatorForm extends React.Component {
       "value" : d.id,
       "label" : d.name
     }))
-    this.setState({types: options})
+    this.setState({types_: options})
   }
-
-
-
 
   componentDidMount(){
     this.getCities()
     this.getTypes()
   }
 
-handleChange(e){
-  this.setState({id: e.value, name: e.label})
+handleChange_city(e){
+  this.setState({city_id: e.value})
+ }
+
+ handleChange_type(e){
+  this.setState({types: e.value})
  }
 
   render() {
     console.log(this.state.cities)
     return (
       <form className="uk-form-stacked">
-         <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
-         <Select placeholder='Select city' options={this.state.cities} onChange={this.handleChange.bind(this)} />
-         <br></br>
-         <Select placeholder='Select transformator type' options={this.state.types} onChange={this.handleChange.bind(this)} />
-        </div>
         <div className="uk-margin-strict">
         <div className="uk-margin">
           <label className="uk-form-label">Number:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({number: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({number: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Hydrogen:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({hydrogen: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({hydrogen: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Oxygen:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({oxygen: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({oxygen: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Nitrogen:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({nitrogen: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({nitrogen: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Methane:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({methane: e.target.value})}} />
-        </div>
-        <div className="uk-margin">
-          <label className="uk-form-label">CO:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({co: e.target.value})}} />
-        </div>
-        <div className="uk-margin">
-          <label className="uk-form-label">CO2:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({co2: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({methane: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         </div>
         <div className="uk-margin-strict">
         <div className="uk-margin">
+          <label className="uk-form-label">CO:</label>
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({co: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
+        </div>
+        <div className="uk-margin">
+          <label className="uk-form-label">CO2:</label>
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({co_2: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
+        </div>
+        <div className="uk-margin">
           <label className="uk-form-label">Ethylene:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({ethylene: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({ethylene: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Ethane:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({ethane: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({ethane: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
           <label className="uk-form-label">Acethylene:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({acethylene: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({acethylene: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
+        </div>
+        <div className="uk-margin-strict">
         <div className="uk-margin">
           <label className="uk-form-label">DBDS:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({dbds: e.target.value})}} />
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({dbds: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
-          <label className="uk-form-label">Interfacial_V:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({interfacial_v: e.target.value})}} />
+          <label className="uk-form-label">Power Factor:</label>
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({power_factor: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
-          <label className="uk-form-label">Dielectric_rigidity:</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({dielectric_rigidity: e.target.value})}} />
+          <label className="uk-form-label">Interfacial V:</label>
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({interfacial_v: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         <div className="uk-margin">
-          <label className="uk-form-label">Water_content</label>
-          <input className="uk-input" type="text" onChange={(e) => {this.setState({water_content: e.target.value})}} />
+          <label className="uk-form-label">Dielectric rigidity:</label>
+          <input className="uk-input"  type="number" min='0' onChange={(e) => {this.setState({dielectric_rigidity: e.target.value})}}onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
+        </div>
+        <div className="uk-margin">
+          <label className="uk-form-label">Water content</label>
+          <input className="uk-input" type="number" min='0' onChange={(e) => {this.setState({water_content: e.target.value})}} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}}/>
         </div>
         </div>
         <input onClick={this.createData} type="submit" value="Create data" className="uk-button uk-button-primary"/>
-
       </form>
     );
   }
