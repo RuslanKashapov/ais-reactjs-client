@@ -7,7 +7,7 @@ import { API_URL, GET_DATA_INTERVAL } from "./constants";
  * данными по установленному населённому пункту 
  */
 
-class CityWeatherMonitor extends React.Component {
+class UpdateMonitor extends React.Component {
     /**
      * Конструктор компонента необходима инициализировать, если в компонент передаются
      * дополнительные параметры или компонент имеет внутренние переменные хранения
@@ -39,10 +39,10 @@ class CityWeatherMonitor extends React.Component {
      * Подробне об особенностях axios см.: https://blog.logrocket.com/axios-vs-fetch-best-http-requests/
      */
     getData() {
-        console.log('GET Request to: ' + API_URL + '/' + this.props.cityName)
+        console.log('GET Request to: ' + API_URL + '?trans_number=' + this.props.number)
         // отправляем запрос на сервер, если данные получены (сервер отвечает в виде массива json-строк), 
         // обновляем массив this.state.weatherData. В случае ошибки очищаем массив. 
-        axios.get(API_URL + '/' + this.props.cityName)
+        axios.get(API_URL  + '?trans_number=' + this.props.number)
         .then(response => {
             this.setState(state => ({
                 weatherData: response.data,
@@ -54,21 +54,17 @@ class CityWeatherMonitor extends React.Component {
             console.log(error);
         });
     }
-
-    /**
-     * Данный метод динамически рендерит строки таблицы, по данным, 
-     * сохраненным в переменной состояния this.state.weatherData
-     */
     renderData() {
-        console.log(this.state.weatherData)
         // если массив this.state.weatherData содержит данные, рендерим строки таблицы
+        console.log(this.state.weatherData)
         if (this.state.weatherData.length > 0) {
             return this.state.weatherData.map((dataRow) => {
                 return(
                     <tr>
                         <td>{dataRow.number}</td>
-                        <td>{this.props.cityName}</td>
+                        <td>{dataRow.city}</td>
                         <td>{dataRow.types}</td>
+                        <td>{dataRow.hydrogen}</td>
                         <td>{dataRow.health_index}</td>
                     </tr>
                 );
@@ -85,30 +81,10 @@ class CityWeatherMonitor extends React.Component {
         }
     }
     
-    /**
-     * Методы componentDidMount() и componentDidUpdate() используются для компонентов,
-     * реализованных в виде классов и выполняют дополнительные действия (side effects) при
-     * создании и обновлении компонента соответственно.
-     * 
-     * Для компонентов, реализованных в виде функций, аналогичные действия выполняет 
-     * функция (хук) useEffect(). Подробнее см.: https://reactjs.org/docs/hooks-effect.html
-     */
-     
-    /** 
-     * Здесь метод componentDidMount() устанавливает внутренний таймер setInterval(), который 
-     * выполняет метод getData() каждый 2000 мс.
-     * 
-     * Использование setInterval() в функциональных компонентах: 
-     * https://upmostly.com/tutorials/setinterval-in-react-components-using-hooks
-     */
     componentDidMount() {
         this.interval = setInterval(() => this.getData(), GET_DATA_INTERVAL);
     }
 
-    /**
-     * Таймер, созданный в компоненте необходимо также очищать при удалении компонента, 
-     * для этого используется втроенная функция класса React.Component: componentWillUnmount()
-     */
     componentWillUnmount() {
         clearInterval(this.interval);
     }
@@ -121,6 +97,7 @@ class CityWeatherMonitor extends React.Component {
                         <th className='uk-text-center'>Number</th>
                         <th className='uk-text-center'>City</th>
                         <th className='uk-text-center'>Type</th>
+                        <th className='uk-text-center'>Hydrogen</th>
                         <th className='uk-text-center'>Health index</th>
                     </tr>
                 </thead>
@@ -132,4 +109,4 @@ class CityWeatherMonitor extends React.Component {
     }
 }
 
-export default CityWeatherMonitor;
+export default UpdateMonitor;

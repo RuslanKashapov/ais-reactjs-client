@@ -1,52 +1,59 @@
-/**
- * import './App.css';
- * 
- * Стили по умолчанию App.css и index.css отключены, т.к. в данном приложении 
- * используется пакет со сторонними стилями UIKit (стили с префиксом uk-*).
- * 
- * Стили UIKit подключены через public/index.html:
- * 
- *   <link rel="stylesheet" href="%PUBLIC_URL%/uikit/css/uikit.min.css" />
- *   <script src="%PUBLIC_URL%/uikit/js/uikit.min.js"></script>
- *   <script src="%PUBLIC_URL%/uikit/js/uikit-icons.min.js"></script>
- *
- * Таким же образом можно подключать стили собственной разработки.
- * Подробнее о пакете UIKit см.: https://getuikit.com/docs/installation
- */
-import React, { useState } from "react";
-
-import CityWeatherMonitor from "./CityWeatherMonitor";
-import UpdateForm from "./UpdateForm";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL, CITY_NAMES, POWER_NUMBERS } from "./constants";
+import Select from 'react-select';
+import UpdateMonitor from "./UpdateMonitor";
 
 
-/**
- * Корневой компонент App.js по умолчанию реализован в виде 
- * функционального компонента, для хранения состояния таких 
- * компонентов используется функция (хук) useState().
- * 
- * Зависимые компоненты (CityWeatherMonitor и CityWeatherForm) 
- * реализованы в виде классов и сохраняют состояние в специальном 
- * атрибуте state. Атрибут cityName={city} передаёт в данные компоненты
- * значение населённого пункта через объект props и соответствующий атрибут:
- * props.cityName
- * 
- * Подробнее о возможных реализациях React компонентов см.:
- * https://reactjs.org/docs/hooks-state.html
- * 
- */
 function UpdatePage() {
-  // Рендерим контент.
-  // Функция map позволяет рендерить элементы массивов.
-  return (
-    <div className="uk-section uk-section-muted">
-      <div className="uk-grid uk-text-center">
-        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><UpdateForm/> <br></br></div>
-      </div>
-      <div className="uk-grid uk-text-center">
-        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor/></div>
-      </div>
-    </div>
-  );
-}
+    const [selectNumber, setSelectedNumber] = useState('');
+    const [selectHydrogen, setSelectedHydrogen] = useState('');
 
+    const updateData = (event) =>{
+        console.log('PUT Request to: ' + API_URL)
+        event.preventDefault();  
+        let data = {
+        number: parseInt(selectNumber), 
+        hydrogen: parseInt(selectHydrogen), 
+        };
+        axios.put(API_URL, data, {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+        })
+        .then(response => {
+        console.log('Response: ' + response.status);
+        }, error => {
+            console.log(error);
+            alert(error);
+        });
+    }
+
+    return (
+      <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
+        <div>
+        <div className="uk-margin-strict">
+        <div className="uk-margin">
+          <label className="uk-form-label">Number:</label>
+          <input className="uk-input" type="number" onChange={(e) => setSelectedNumber(e.currentTarget.value)} onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}} />
+        </div>
+        <div className="uk-margin">
+          <label className="uk-form-label">Hydrogen:</label>
+          <input className="uk-input" type="number" onChange={(e) => setSelectedHydrogen(e.currentTarget.value)}  onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) {event.preventDefault();}}} />
+        </div>
+        </div>
+        <input onClick={updateData} type="submit" value="Update data" className="uk-button uk-button-primary"/>
+        </div>
+        <UpdateMonitor number={selectNumber} />
+      </div>
+    );
+
+}
 export default UpdatePage;
+
+
+
+
+
+

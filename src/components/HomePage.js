@@ -17,6 +17,7 @@ import React, { useState, useEffect } from "react";
 
 import CityWeatherMonitor from "./CityWeatherMonitor";
 import CityWeatherForm from "./CityWeatherForm";
+import Info from "./Info";
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
 import axios from "axios";
@@ -63,41 +64,21 @@ function handleChange_type(e) {
 }
 
 
-
-
-
 function HomePage() {
-  const [items, setItems] = useState([]);
-  const [inputValue, setValue] = useState('');
-  const [selectedValue, setSelectedValue] = useState(null);
+  
 
-  const handleInputChange = value => {
-    setValue(value);
-  };
-
-  // handle selection
-  const handleChange = value => {
-    setSelectedValue(value);
-  }
-
-  const getCities = () => {
-    return axios.get("http://127.0.0.1:8000/cities").then(result => {
-      const res = result.data.data;
-      return res;
-    });
-  }
-
-
-  const [select, setSelected] = useState('');
-  const [optionList, setOptionList] = useState([]);
-  const fetchData = () => {
+  const [selectCities, setSelectedCities] = useState('');
+  const [selectTypes, setSelectedTypes] = useState('');
+  const [optionListCities, setOptionListCities] = useState([]);
+  const [optionListTypes, setOptionListTypes] = useState([]);
+  const fetchCities = () => {
     axios
       .get('http://127.0.0.1:8000/cities')
       .then((response) => {
         const { data } = response;
         if (response.status === 200) {
           //check the api call is success by stats code 200,201 ...etc
-          setOptionList(data)
+          setOptionListCities(data)
         } else {
           //error handle section 
         }
@@ -105,8 +86,27 @@ function HomePage() {
       .catch((error) => console.log(error));
   };
 
+  const fetchTypes = () => {
+    axios
+      .get('http://127.0.0.1:8000/types')
+      .then((response) => {
+        const { data } = response;
+        if (response.status === 200) {
+          //check the api call is success by stats code 200,201 ...etc
+          setOptionListTypes(data)
+        } else {
+          //error handle section 
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+
+
+
   useEffect(() => {
-    fetchData();
+    fetchCities();
+    fetchTypes();
   }, [])
 
 
@@ -117,105 +117,37 @@ function HomePage() {
   return (
     <div className="uk-section uk-section-muted">
       <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
-        {/* <AsyncSelect
-        cacheOptions
-        defaultOptions
-        value={selectedValue}
-        //getOptionLabel={e => e.name}
-        //getOptionValue={e => e.id}
-        loadOptions={getCities}
-        onInputChange={handleInputChange}
-        onChange={handleChange}
-      /> */}
         <select
-          className="uk-select"
+          className="uk-select uk-margin uk-text-center"
           disabled={false}
-          value={select}
-          onChange={(e) => setSelected(e.currentTarget.value)}
+          value={selectCities}
+          onChange={(e) => setSelectedCities(e.currentTarget.value)}
         >
-          {optionList.map((item) => (
+          {optionListCities.map((item) => (
             <option key={item.id} value={item.name}>
               {item.name}
             </option>
           ))}
         </select>
-        {/* <select className="uk-select" placeholder='Select city' value={city} onChange={(e) => setCity(e.target.value)}>
-         {Object.keys(getCities()).map((cityName) => <option value={cityName}>{cityName}</option>)}
-          </select> */}
-        <br></br>
-        {/* <Select placeholder='Select transformator type' options={state.types_} onChange={handleChange_type.bind(type)}/> */}
+        <select
+          className="uk-select uk-text-center"
+          disabled={false}
+          value={selectTypes}
+          onChange={(e) => setSelectedTypes(e.currentTarget.value)}
+        >
+          {optionListTypes.map((item) => (
+            <option key={item.id} value={item.name}>
+              {item.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="uk-grid uk-text-center">
         <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherForm /> <br></br></div>
       </div>
-      <div className="uk-grid uk-text-center-output">
-        <div className="uk-grid uk-text-center-output-contain">
-          <div className="uk-grid uk-text-center-output-index-left">
-            <p>Health index(%)</p>
-            <p className="health_index">76.31</p>
-          </div>
-          <div className="uk-grid uk-text-center-output-index-right">
-            <table>
-              <tr>
-                <th>HI%</th>
-                &ensp;
-                <th>Condition</th>
-                &ensp;
-                <th>Expected Lifetime</th>
-                &ensp;
-                <th>Requirements</th>
-              </tr>
-              <tr>
-                <td>85-100</td>
-                &ensp;
-                <td>Very Good</td>
-                &ensp;
-                <td>More than 15 years</td>
-                &ensp;
-                <td>Normal maintenance</td>
-              </tr>
-              <tr>
-                <td>75-85</td>
-                &ensp;
-                <td>Good</td>
-                &ensp;
-                <td>More than 10 years</td>
-                &ensp;
-                <td>Normal maintenance</td>
-              </tr>
-              <tr>
-                <td>50-70</td>
-                &ensp;
-                <td>Fair</td>
-                &ensp;
-                <td>From 3-10 years</td>
-                &ensp;
-                <td>Increase diagnostic testing, possible remedial work or replacement needed depending on criticality</td>
-              </tr>
-              <tr>
-                <td>30-50</td>
-                &ensp;
-                <td>Poor</td>
-                &ensp;
-                <td>Less than 3 years</td>
-                &ensp;
-                <td>Start planning process to replace or rebuild considering risk and consequences of failure</td>
-              </tr>
-              <tr>
-                <td>0-30</td>
-                &ensp;
-                <td>Very Poor</td>
-                &ensp;
-                <td>Near to the end of life</td>
-                &ensp;
-                <td>Immediately assess risk; replace or rebuild based on assessment</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Info></Info>
       <div className="uk-grid uk-text-center">
-        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor cityName={'UFA'} /></div>
+        <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor cityName={selectCities}/></div>
       </div>
     </div>
   );

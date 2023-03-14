@@ -43,4 +43,4 @@ export const POWER_NUMBERS = {
 }
 
 // Интервал получения данных с сервера в мс.
-export const GET_DATA_INTERVAL = 2000;
+export const GET_DATA_INTERVAL = 20000;
