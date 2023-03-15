@@ -1521,7 +1521,8 @@ select.uk-form-width-xsmall {
 .uk-button-primary {
     background-color: #1e87f0;
     color: #fff;
-    border: 1px solid transparent
+    border: 1px solid transparent;
+    margin-bottom: 20px;
 }
 
 .uk-button-primary:hover {
@@ -3477,7 +3478,8 @@ select.uk-form-width-xsmall {
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
-    list-style: none
+    list-style: none;
+    text-align: start;
 }
 
 .uk-grid>* {
