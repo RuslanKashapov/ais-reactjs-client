@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_URL, CITY_NAMES, POWER_NUMBERS } from "./constants";
 import Select from 'react-select';
-import Info from "./Info";
+import Info from "./Info.jsx";
 
 
 
