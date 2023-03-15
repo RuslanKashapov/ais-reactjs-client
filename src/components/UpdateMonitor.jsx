@@ -19,7 +19,7 @@ class UpdateMonitor extends React.Component {
     constructor(props) {
         super(props);
         // устанавливаем состояние компонента по умолчанию
-        this.state = {weatherData: []};
+        this.state = {weatherData: {}};
     }
 
     /**
@@ -56,19 +56,16 @@ class UpdateMonitor extends React.Component {
     }
     renderData() {
         // если массив this.state.weatherData содержит данные, рендерим строки таблицы
-        console.log(this.state.weatherData)
-        if (this.state.weatherData.length > 0) {
-            return this.state.weatherData.map((dataRow) => {
+        if (this.state.weatherData.number > 0) {
                 return(
                     <tr>
-                        <td>{dataRow.number}</td>
-                        <td>{dataRow.city}</td>
-                        <td>{dataRow.types}</td>
-                        <td>{dataRow.hydrogen}</td>
-                        <td>{dataRow.health_index}</td>
+                        <td>{this.state.weatherData.number}</td>
+                        <td>{this.state.weatherData.city_id}</td>
+                        <td>{this.state.weatherData.types}</td>
+                        <td>{this.state.weatherData.hydrogen}</td>
+                        <td>{this.state.weatherData.health_index}</td>
                     </tr>
                 );
-            });
         }
         // иначе выводим информацию об отсутствии данных
         else {

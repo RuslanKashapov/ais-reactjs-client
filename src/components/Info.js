@@ -1,46 +1,40 @@
-/**
- * import './App.css';
- * 
- * Стили по умолчанию App.css и index.css отключены, т.к. в данном приложении 
- * используется пакет со сторонними стилями UIKit (стили с префиксом uk-*).
- * 
- * Стили UIKit подключены через public/index.html:
- * 
- *   <link rel="stylesheet" href="%PUBLIC_URL%/uikit/css/uikit.min.css" />
- *   <script src="%PUBLIC_URL%/uikit/js/uikit.min.js"></script>
- *   <script src="%PUBLIC_URL%/uikit/js/uikit-icons.min.js"></script>
- *
- * Таким же образом можно подключать стили собственной разработки.
- * Подробнее о пакете UIKit см.: https://getuikit.com/docs/installation
- */
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
+import { API_URL, GET_DATA_INTERVAL } from "./constants";
+import axios from "axios";
 
 
-/**
- * Корневой компонент App.js по умолчанию реализован в виде 
- * функционального компонента, для хранения состояния таких 
- * компонентов используется функция (хук) useState().
- * 
- * Зависимые компоненты (CityWeatherMonitor и CityWeatherForm) 
- * реализованы в виде классов и сохраняют состояние в специальном 
- * атрибуте state. Атрибут cityName={city} передаёт в данные компоненты
- * значение населённого пункта через объект props и соответствующий атрибут:
- * props.cityName
- * 
- * Подробнее о возможных реализациях React компонентов см.:
- * https://reactjs.org/docs/hooks-state.html
- * 
- */
-function Info() {
-  // Рендерим контент.
-  // Функция map позволяет рендерить элементы массивов.
+
+function Info(props) {
+
+  var optionHealthind = {};
+
+  const getData = () => {
+    console.log('GET Request to: ' + API_URL + '?trans_number=' + props.n)
+    // отправляем запрос на сервер, если данные получены (сервер отвечает в виде массива json-строк), 
+    // обновляем массив this.state.weatherData. В случае ошибки очищаем массив. 
+    axios.get(API_URL  + '?trans_number=' + props.n)
+    .then(response => {
+      optionHealthind =  response.data;
+      console.log(optionHealthind.health_index);
+    }, error => {
+    
+        console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+
   return (
     <div className="uk-section uk-section-muted">
      <div className="uk-grid uk-text-center-output">
         <div className="uk-grid uk-text-center-output-contain">
           <div className="uk-grid uk-text-center-output-index-left">
             <p>Health index(%)</p>
-            <p className="health_index">76.31</p>
+            <p className="health_index">{optionHealthind.health_index}</p>
           </div>
           <div className="uk-grid uk-text-center-output-index-right">
             <table>
@@ -105,5 +99,6 @@ function Info() {
     </div>
   );
 }
+
 
 export default Info;

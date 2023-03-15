@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_URL, CITY_NAMES, POWER_NUMBERS } from "./constants";
 import Select from 'react-select';
+import Info from "./Info";
 
 
 
@@ -105,6 +106,7 @@ handleChange_city(e){
   render() {
     console.log(this.state.cities)
     return (
+      <div>
       <form className="uk-form-stacked">
         <div className="uk-margin-strict">
         <div className="uk-margin">
@@ -174,6 +176,11 @@ handleChange_city(e){
         </div>
         <input onClick={this.createData} type="submit" value="Create data" className="uk-button uk-button-primary"/>
       </form>
+      <div>
+        <Info n={this.state.number}/>
+      </div>
+      </div>
+
     );
   }
 

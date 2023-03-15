@@ -67,7 +67,7 @@ function handleChange_type(e) {
 function HomePage() {
   
 
-  const [selectCities, setSelectedCities] = useState('');
+  const [selectCities, setSelectedCities] = useState('UFA');
   const [selectTypes, setSelectedTypes] = useState('');
   const [optionListCities, setOptionListCities] = useState([]);
   const [optionListTypes, setOptionListTypes] = useState([]);
@@ -145,7 +145,6 @@ function HomePage() {
       <div className="uk-grid uk-text-center">
         <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherForm /> <br></br></div>
       </div>
-      <Info></Info>
       <div className="uk-grid uk-text-center">
         <div className="uk-width-expand@m uk-card uk-card-default uk-card-body"><CityWeatherMonitor cityName={selectCities}/></div>
       </div>
