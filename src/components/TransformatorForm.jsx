@@ -6,27 +6,14 @@ import Info from "./Info.jsx";
 
 
 
-class transformatorForm extends React.Component {
+class TransformatorForm extends React.Component {
 
   constructor(props) {
     super(props);
     // устанавливаем состояние компонента по умолчанию
-    this.state = {number: 100, hydrogen: 100, oxygen: 100, nitrogen: 100, methane: 100, co: 100, co_2: 100, ethylene: 100, ethane: 100, acethylene: 100, dbds: 100,
+    this.state = {number: 0, hydrogen: 100, oxygen: 100, nitrogen: 100, methane: 100, co: 100, co_2: 100, ethylene: 100, ethane: 100, acethylene: 100, dbds: 100,
     power_factor: 100, interfacial_v: 100, dielectric_rigidity: 100, water_content: 100, health_index: 0, city_id: 1, types: 1, cities: [], types_: []};
     }
-
-  /**
-   * Обновление данных на сервере (отправка HTTP PUT запроса).
-   * 
-   * Данная функция вызывается при Submit формы.
-   * 
-   * Конструкция updateData = (event) => {...} реализует публичную функцию, которую сразу можно
-   * привязывать к событиям типа onChange, onSubmit и т.д.
-   * 
-   * Подробнее об обработчиках событий в компонентах React см.: https://reactjs.org/docs/handling-events.html
-   * 
-   * @param {*} event 
-   */
 
 
   createData = (event) => {
@@ -185,4 +172,4 @@ handleChange_city(e){
   }
 
 }
-export default transformatorForm;
+export default TransformatorForm;

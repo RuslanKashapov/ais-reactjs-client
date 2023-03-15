@@ -8,43 +8,41 @@ class Info extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = {weatherData: {}};
+        this.state = {transData: {}};
     }
 
     getData() {
         console.log('GET Request to: ' + API_URL + '?trans_number=' + this.props.n)
         // отправляем запрос на сервер, если данные получены (сервер отвечает в виде массива json-строк), 
-        // обновляем массив this.state.weatherData. В случае ошибки очищаем массив. 
         axios.get(API_URL  + '?trans_number=' + this.props.n)
         .then(response => {
             this.setState(state => ({
-                weatherData: response.data,
+                transData: response.data,
             }));
-            console.log(this.state.weatherData);
+            console.log(this.state.transData);
         }, error => {
             this.setState(state => ({
-                weatherData: {},
+                transData: {},
             }));
             console.log(error);
         });
     }
 
     renderData() {
-        // если массив this.state.weatherData содержит данные, рендерим строки таблицы
         if (this.props.n > 0) {
-            if (this.state.weatherData.health_index >= 70){
+            if (this.state.transData.health_index >= 70){
                 return(
                     <div className="uk-grid uk-text-center-output-index-left green_text">
                     <p>Health index(%)</p>
-                    <p className="health_index">{this.state.weatherData.health_index}</p>
+                    <p className="health_index">{this.state.transData.health_index}</p>
                   </div>
                 );
             }
-            else if (this.state.weatherData.health_index < 70 && this.state.weatherData.health_index >= 50){
+            else if (this.state.transData.health_index < 70 && this.state.transData.health_index >= 50){
                 return(
                     <div className="uk-grid uk-text-center-output-index-left yellow_text">
                     <p>Health index(%)</p>
-                    <p className="health_index">{this.state.weatherData.health_index}</p>
+                    <p className="health_index">{this.state.transData.health_index}</p>
                   </div>
                 );
                 }
@@ -52,7 +50,7 @@ class Info extends React.Component{
                 return(
                     <div className="uk-grid uk-text-center-output-index-left red_text">
                     <p>Health index(%)</p>
-                    <p className="health_index">{this.state.weatherData.health_index}</p>
+                    <p className="health_index">{this.state.transData.health_index}</p>
                     </div>
                 );
                 }
@@ -113,7 +111,7 @@ render(){
                 <td>Normal maintenance</td>
               </tr>
               <tr>
-                <td>50-70</td>
+                <td>50-75</td>
                 &ensp;
                 <td>Fair</td>
                 &ensp;

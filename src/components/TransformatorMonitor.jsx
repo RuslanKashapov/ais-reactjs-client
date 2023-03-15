@@ -2,16 +2,18 @@ import React from "react";
 import axios from "axios";
 import { API_URL, GET_DATA_INTERVAL } from "./constants";
 
-class UpdateMonitor extends React.Component {
+
+class TransformatorMonitor extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {transData: {}};
+        // устанавливаем состояние компонента по умолчанию
+        this.state = {transData: []};
     }
 
     getData() {
-        console.log('GET Request to: ' + API_URL + '?trans_number=' + this.props.number)
-        axios.get(API_URL  + '?trans_number=' + this.props.number)
+        console.log('GET Request to: ' + API_URL + '/' + this.props.cityName) 
+        axios.get(API_URL + '/' + this.props.cityName)
         .then(response => {
             this.setState(state => ({
                 transData: response.data,
@@ -23,18 +25,22 @@ class UpdateMonitor extends React.Component {
             console.log(error);
         });
     }
+
     renderData() {
-        if (this.state.transData.number > 0) {
+        console.log(this.state.transData)
+        if (this.state.transData.length > 0) {
+            return this.state.transData.map((dataRow) => {
                 return(
                     <tr>
-                        <td>{this.state.transData.number}</td>
-                        <td>{this.state.transData.city_id}</td>
-                        <td>{this.state.transData.types}</td>
-                        <td>{this.state.transData.hydrogen}</td>
-                        <td>{this.state.transData.health_index}</td>
+                        <td>{dataRow.number}</td>
+                        <td>{this.props.cityName}</td>
+                        <td>{dataRow.types}</td>
+                        <td>{dataRow.health_index}</td>
                     </tr>
                 );
+            });
         }
+        // иначе выводим информацию об отсутствии данных
         else {
             return(
                 <div className="uk-alert-danger">
@@ -61,7 +67,6 @@ class UpdateMonitor extends React.Component {
                         <th className='uk-text-center'>Number</th>
                         <th className='uk-text-center'>City</th>
                         <th className='uk-text-center'>Type</th>
-                        <th className='uk-text-center'>Hydrogen</th>
                         <th className='uk-text-center'>Health index</th>
                     </tr>
                 </thead>
@@ -73,4 +78,4 @@ class UpdateMonitor extends React.Component {
     }
 }
 
-export default UpdateMonitor;
+export default TransformatorMonitor;
