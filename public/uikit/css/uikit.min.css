@@ -7886,6 +7886,19 @@ iframe[uk-cover] {
     opacity: 0 !important
 }
 
+
+.green_text{
+    background-color: rgb(79, 204, 79);
+}
+
+.red_text{
+    background-color: rgb(231, 140, 140);
+}
+
+.yellow_text{
+    background-color: rgb(231, 209, 111);
+}
+
 @media (hover:none) {
     .uk-hidden-touch {
         display: none !important
