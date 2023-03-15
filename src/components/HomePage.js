@@ -118,7 +118,7 @@ function HomePage() {
     <div className="uk-section uk-section-muted">
       <div className="uk-margin uk-card uk-card-default uk-card-body uk-text-center">
         <select
-          className="uk-select uk-margin uk-text-center"
+          className="uk-select uk-text-center"
           disabled={false}
           value={selectCities}
           onChange={(e) => setSelectedCities(e.currentTarget.value)}
